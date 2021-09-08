@@ -28,7 +28,7 @@ library(lubridate)
 **Task** Load the PPP loan dataset by running the following codeblock.
 
 ```{r}
-maryland_ppp <- read_csv('ppp_applications_md.csv')
+maryland_ppp <- read_csv('data/ppp_applications_md.csv')
 ```
 
 ### Task 3: Glimpse data
