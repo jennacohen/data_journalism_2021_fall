@@ -51,9 +51,10 @@ west_virginia_ppp <- read_rds("lab_02.rds")
 
 ```{r}
 west_virginia_ppp %>%
-  select(loan_number, amount) %>%
   mutate(
-  under_10k= 10000>loan_number
+    loan_amount = case_when(
+        amount == '1' ~ "under_10k",
+      )
   )
 ```
 
