@@ -60,6 +60,8 @@ west_virginia_ppp %>%
   # chose columns you want to see in the table output
   select(loan_number, amount) %>%
   # creates a new column with all of these labels - be sure to enter numbers with no quotes and   characters with 'character here'
+  #mutate will either contain an existing field that you're replacing (really dont do this) or   create a new name for a new column
+  #loan_amount is the col name I created
   mutate(
     loan_amount = case_when(
         amount < 10000 ~ "under_10k",
@@ -74,6 +76,7 @@ west_virginia_ppp %>%
   group_by(loan_amount) %>% 
   # counts number each label
   summarise(number_of_loans=n()) %>%
+  #arrange data to show largest loan amount first
   arrange(desc(number_of_loans))
 
 ```
@@ -103,8 +106,14 @@ west_virginia_ppp %>%
 
 ```{r}
 west_virginia_ppp %>%
+  #filter out so we only see dates from 2021
+  filter(date_approved > '2020-12-31') %>%
+  #create a month column
   mutate(Month = floor_date(date_approved, "month")) %>%
+  #group all the loan approvals by month
   group_by(Month) %>%
+  #count the approved loans for each month
   summarise(total = n()) %>%
+  #display approved loans in descending order
   arrange(desc(total))
 ```
