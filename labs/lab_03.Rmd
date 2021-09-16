@@ -124,7 +124,7 @@ Some hints to help you answer this question:
 * When you examine the disclosure forms, there may be lots of stock sales and retirement accounts mixed in.  Ignore those. In the table in the disclosure forms, look for "Partnership" or "C-Corp" in the column named "Income Type"
 * This is a link to details on passage of the [CARES ACT](https://www.congress.gov/bill/116th-congress/house-bill/748). You can find a link to how the House voted by clicking on a link from [this page](https://www.congress.gov/bill/116th-congress/house-bill/748/actions).
 
-A3:The businesses names are: DM Motors (DM Motor, Inc) ; Dutch Miller Chevrolet, Inc ;Dutch Miller Subaru, Inc ; Dutch Miller of Charlotte, Inc ; Dutch Miller of Charleston, Inc. The businesses are all car dealerships. 
+A3:The businesses names are: DM Motors (DM Motor, Inc) ; Dutch Miller Chevrolet, Inc ;Dutch Miller Subaru, Inc ; Dutch Miller of Charlotte, Inc ; Dutch Miller of Charleston, Inc. The businesses are all car dealerships. In total, the five businesses received $3,105,300 in loans. There were 101.13% of loans forgiven since they were over-forgiven by 35,171. Carol Miller, who has a partnership with the five companies, voted "yea" on the CARES act and was advertising the program on twitter. 
 
 ```{r}
 
@@ -132,8 +132,17 @@ A3:The businesses names are: DM Motors (DM Motor, Inc) ; Dutch Miller Chevrolet,
 # First, create a dataframe that only has loans to those five companies
 
 five_companies <- wv_ppp_loans %>% 
+  filter(name == "DUTCH MILLER CHEVROLET, INC." | name == "DUTCH MILLER OF CHARLESTON, INC" |name == "DUTCH MILLER OF CHARLOTTE, INC" |name == "DUTCH MILLER SUBARU, INC" | name == "DM MOTOR, INC")
   
-
 # Second, use that newly created dataframe to calculate total loan amount and percentage forgiven for those companies
-
+five_companies %>%  
+  select(amount, forgiveness_amount) %>% 
+  summarise(
+  #add loan amounts from all 5 companies
+  total_loans_amount = sum(amount),
+  #add forgiveness amount for all five companies
+  total_forgiveness_amount = sum(forgiveness_amount),
+  #get percentage of loans forgiven
+  percent_forgiven = (total_forgiveness_amount/total_loans_amount)*100
+  ) 
 ```
