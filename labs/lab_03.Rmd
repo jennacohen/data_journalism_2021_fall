@@ -45,13 +45,13 @@ wv_ppp_loans %>%
   mutate(city = str_to_title(city)) %>% 
   #fixing city mispellings
   mutate(city = case_when(
+     # I could also do...str_detect(city,"^St") ~ "Saint Albans", str_detect(city, "^S |^So ")     ~ str_replace(city, "^S |^So","South "),  ... but be careful to ensure this only changes       the data you want it to change. ie. if there was another city that started with St. that       you didn't want to change, you couldn't do this. Also, in this case, saint albans would        need to come first, otherwise these would all say south based on the code above
     city == "Balle" ~ "Belle",
     city == "Charelston" ~ "Charleston",
     city == "Crosslanes" ~ "Cross Lanes",
     city == "Elkveiw" ~ "Elkview",
     city == "S Charleston" ~ "South Charleston",
     city == "So Charleston" ~ "South Charleston",
-    # I could also do...str_detect(city,"^St") ~ "Saint Albans",... but be careful to ensure this only changes the data you want it to change. ie. if there was another city that started with St. that you didn't want to change, you couldn't do this
     city == "St.albans" ~ "Saint Albans",
     city == "St Albans" ~ "Saint Albans",
     city == "St. Albans" ~ "Saint Albans",
