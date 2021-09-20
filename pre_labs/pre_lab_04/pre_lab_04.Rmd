@@ -73,6 +73,7 @@ naics_codes <- read_csv('data/naics_codes.csv')
 
 ```{r}
 # with nrow included to match row total
+#start with larger data set, left join means show/connect the rows that are in common, select name (from md ppp df), naics_code (from both) and title (from naics code df), the count , nrow() means count all the rows
 maryland_ppp %>% left_join(naics_codes, by="naics_code") %>% select(name, naics_code, title) %>% nrow()
 ```
 ### Task 6: Looking at Joined Data
@@ -87,6 +88,7 @@ maryland_ppp %>% left_join(naics_codes) %>% select(name, naics_code, title)
 **Task** Create a new dataframe with PPP and NAICS data joined together
 
 ```{r}
+#creates new df that is the same ad md_ppp but adds a column for title of naics codes, if you filter or group by, etc. with this new df, title can be included in that
 maryland_ppp_with_naics <- maryland_ppp %>% left_join(naics_codes)
 ```
 
@@ -103,12 +105,14 @@ maryland_zcta <- read_csv('data/maryland_zcta.csv')
 
 ```{r}
 # join on zip - but there's a problem
+#tell r that although they have diff column names, they mean the same thing/want to use them together
 maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_join(maryland_zcta, by=c("zip"="ZCTA5N"))
 ```
 ### Task 10: Fix ZCTA Data
 **Task** Fix the ZCTA file by changing the datatype
 
 ```{r}
+#sees one as character and one as a number, so change it to a character
 maryland_zcta <- maryland_zcta %>% mutate(across(ZCTA5N, as.character))
 ```
 
@@ -127,6 +131,7 @@ View(maryland_ppp_with_naics_and_demographics)
 
 ```{r}
 # make a zip5 column and redo the join
+#make it a 5-digit zip instead of 9 digit zip, that's why it wouldn't originally join
 maryland_ppp_with_naics <- maryland_ppp_with_naics %>% mutate(zip5 = str_sub(zip, 1, 5))
 maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_join(maryland_zcta, by=c("zip5"="ZCTA5N"))
 ```
