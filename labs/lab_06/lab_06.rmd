@@ -53,7 +53,7 @@ Let's load it into R, and in doing so we'll skip the first two rows and add our 
 **Task** Write code to read the CSV file into a dataframe called `international_migration`. As in the pre_lab, you may have to skip 1 or more rows and you may want to supply easier to use column names that use underscores.
 
 ```{r}
-# Write the code to load the CSV file here
+international_migration <- read_csv("data/tabula-md-statistical-handbook.csv", skip=2, col_names=c("state_jurisdiction","total_2010_2011", "total_2011_2012", "total_2012_2013","total_2013_2014","total_2014_2015","total_2015_2016","total_2016_2017","total_2017_2018","total_2018_2019", "total_overall"))
 ```
 
 Add a column for the type of migration ("international") and populate it:
@@ -61,32 +61,42 @@ Add a column for the type of migration ("international") and populate it:
 **Task** Write the code to add a `migration_type` column to the data and populate it with the value of "international"
 
 ```{r}
-# Write the code to add the column here
+international_migration <- international_migration %>% 
+  mutate(
+    migration_type = "international"
+  )
 ```
 
 ## Answer questions
 
 **Q1** Which region and county/city below the state level accounted for the largest percentage of international migration overall?  You'll need to add and populate columns representing percent of total using `mutate`.
-**A1** [write your answer here]
+**A1** The region that accounted for the largest percentage of international migration is the Suburban Washington Region, with 62.8%. The county/city with the largest percentage is Montgomery, with 36.8%.
 
 ```{r}
-# Write the code to produce your answer here
+international_migration<- international_migration %>% 
+  mutate(
+    percentage_overall = (total_overall/198996)*100
+  ) %>% 
+  arrange(desc(percentage_overall))
+
 
 ```
 
 **Q2** Write a sentence or two that describes the data you produced in A1. Try to convey the most important idea.
-**A2** [write your answer here]
+**A2** The suburban washington region had the largest percentage of migrants with 62.8% and Montgomery County, which falls within this region, is responsible for more than half of this total. 
 
 **Q3** Which region & jurisdiction had the biggest percentage change for international migration between July 2018 and July 2017? The formula for percentage change is easy to remember: (New-Old)/Old.
-**A3** [write your answer here]
-
+**A3** The county with the largest percentage change was Calvert, with a 76.9% decline. The region with the biggest change was the Southern Maryland region, with a 58.5% decline.
 ```{r}
-# Write the code to produce your answer here
-
+international_migration<- international_migration %>% 
+  mutate(
+    change_2018_2017 = ((total_2017_2018-total_2016_2017)/total_2016_2017)*100 
+  )%>% 
+  arrange(desc(change_2018_2017))
 ```
 
 **Q4** What's your best guess as to why these declines occurred, and in those area in particular?
-**A4** [write your answer here]
+**A4** I would infer that these declines occurred because of the election results in these regions. In the Calvert county gubernatorial election, 75% of residents voted Republican. Areas that are more republican are typically less open to migrants joining their communities. 
 
 
 ## Back to Tabula
@@ -102,7 +112,7 @@ Let's load it into R, and in doing so we'll skip the first two rows and add our 
 **Task** Write code to read the CSV file into a dataframe called `domestic_migration`. As in the pre_lab, you may have to skip 1 or more rows and you may want to supply easier to use column names that use underscores. Your work on the international file should serve as a guide.
 
 ```{r}
-# Write the code to load the CSV file here
+domestic_migration <- read_csv("data/tabula-md-statistical-handbook-domestic.csv", col_names=c("state_jurisdiction","total_2010_2011", "total_2011_2012", "total_2012_2013","total_2013_2014","total_2014_2015","total_2015_2016","total_2016_2017","total_2017_2018","total_2018_2019", "total_overall"))
 ```
 
 Add a column for the type of migration ("domestic") and populate it:
@@ -110,25 +120,31 @@ Add a column for the type of migration ("domestic") and populate it:
 **Task** Write the code to add a `migration_type` column to the data and populate it with the value of "domestic"
 
 ```{r}
-# Write the code to add the column here
+domestic_migration <- domestic_migration %>% 
+  mutate(
+    migration_type = "domestic"
+  )
 ```
 
 ## Answer questions
 **Q5** Which Maryland individual jurisdiction saw the largest net decrease in domestic migration overall?
-**A5** [write your answer here]
+**A5** The Suburban Washington Region had the largest net decrease in domestic migration, with a net decrease of -107800.
 
 ```{r}
-# Write the code to produce your answer here
-
+domestic_migration<- domestic_migration %>% 
+  arrange(total_overall)
 ```
 
 **Q6** How many regions & jurisdictions had net positive migration for July 2017, July 2018 and July 2019 (not just individually but all three together)?
-**A6** [write your answer here]
+**A6** 14 regions & jurisdictions had net positive migration for all three years. 
 
 ```{r}
-# Write the code to produce your answer here
+domestic_migration %>% 
+  select(state_jurisdiction, total_2016_2017, total_2017_2018, total_2018_2019) %>% 
+  filter(total_2016_2017 > 0 & total_2017_2018 > 0 & total_2018_2019 > 0)
+
 
 ```
 
 **Q7** How would you describe this data? Is there a county or region that stands out, and why?
-**A7** [write your answer here]
+**A7** I would describe this data as standard as I don't see any one region standing out with having a major change in their net domestic migration. The majority of the jurisdictions are located on the Eastern Shore, and the two counties in the Southern Maryland Region, Howard and Fredrick, are have a positive net for the 3 years as well. 
