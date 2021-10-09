@@ -47,6 +47,15 @@ In this section, describe the source of the data, write a basic data dictionary 
 fatal_police_shootings<- read_csv("data/fatal-police-shootings-data.csv")
 
 # Clean required data and prepare for analysis if needed. 
+#counts rows to get total number of fatal shootings
+total_fatal_shootings <- fatal_police_shootings %>% 
+  nrow()
+#filters and counts to get number of Black women fatally shot
+total_black_women_shot <- fatal_police_shootings %>% 
+  filter(gender == "F" & race == "B") %>% 
+  summarise(
+      total_black_women_shot = sum(n()
+  ))
 
 
 ```
@@ -54,7 +63,67 @@ fatal_police_shootings<- read_csv("data/fatal-police-shootings-data.csv")
 ## Sentences to Engineer
 In this notebook, we are reverse engineering five sentences from the story.
 
-### Sentence 1
+### Sentence 1 - Jenna
+
+* **Sentence text**: [“Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths.”]
+* **Analysis summary**: I was able to confirm the finding for the first part of the sentence, which stated that black women accounted for less than 1 percent of overall fatal shootings. However, when I calculated the remaining two parts of the sentence, I couldn't confirm the finding. The sentence states that black women account for 20% of women shot, but I got 18%. The more troubling of the two not confirmed was the last part. My work found that 12.6% of all unarmed deaths were black women, but the sentence states they account for 28%. My only explanation at this point would be that they included the "undetermined" entires in the unnarmed category as well.
+
+fatal_police_shootings %>% 
+  group_by(gender, race) %>% 
+  summarise(number = n()) %>% 
+  ungroup() %>% 
+  mutate(total = sum(number)) %>% 
+  mutate(percent = (number/total)*100) %>% View()
+
+```{r}
+# Put code to reverse engineer sentence here
+#(part 1)Black women have accounted for less than 1 percent of the overall fatal shootings
+
+total_black_women_shot_percentage = (total_black_women_shot/total_fatal_shootings)*100
+total_black_women_shot_percentage
+
+# Display results of code below this codeblock
+```
+
+```{r}
+# Put code to reverse engineer sentence here
+
+# (part 2) Black women, who are 13 percent of the female population, account for 20 percent of the women shot
+total_women_shot = fatal_police_shootings %>% 
+   #total women shot
+  filter(gender == "F") %>% nrow()
+  #divide black women by total women shot
+  black_women_out_of_women_shot = (total_black_women_shot/total_women_shot)*100
+# Display results of code below this codeblock
+   black_women_out_of_women_shot
+```
+
+```{r}
+# Put code to reverse engineer sentence here
+
+# (part 3) Black women account for 28 percent of the unarmed deaths.
+total_unarmed = fatal_police_shootings %>% 
+   #total women shot
+  filter(armed == "unarmed") %>% nrow()
+  #divide black women by total unarmed
+  black_women_out_of_unarmed = (total_black_women_shot/total_unarmed)*100
+# Display results of code below this codeblock
+   black_women_out_of_unarmed 
+```
+
+### Sentence 2 - Jenna
+
+* **Sentence text**: [“About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.”]
+* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+
+```{r}
+# Put code to reverse engineer sentence here
+
+# Display results of code below this codeblock
+
+```
+
+### Sentence 3 - Taneen
 
 * **Sentence text**: [Paste in sentence to engineer here]
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
@@ -62,14 +131,13 @@ In this notebook, we are reverse engineering five sentences from the story.
 ```{r}
 # Put code to reverse engineer sentence here
 
-
 # Display results of code below this codeblock
 
 ```
 
-### Sentence 2
+### Sentence 4 - Jaime
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: [Since 2015, police have killed 26 unarmed women, including Taylor. Of those, 14 were White, seven were Black, four were Hispanic and one’s race was unknown. While about twice as many White women were shot and killed as Black women, White women account for five times the Black female population"]
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -79,31 +147,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ```
 
-### Sentence 3
-
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
-
-```{r}
-# Put code to reverse engineer sentence here
-
-# Display results of code below this codeblock
-
-```
-
-### Sentence 4
-
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
-
-```{r}
-# Put code to reverse engineer sentence here
-
-# Display results of code below this codeblock
-
-```
-
-### Sentence 5
+### Sentence 5 - Max
 
 * **Sentence text**: [Paste in sentence to engineer here]
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
