@@ -93,6 +93,8 @@ international_migration<- international_migration %>%
     change_2018_2017 = ((total_2017_2018-total_2016_2017)/total_2016_2017)*100 
   )%>% 
   arrange(desc(change_2018_2017))
+
+international_migration
 ```
 
 **Q4** What's your best guess as to why these declines occurred, and in those area in particular?
