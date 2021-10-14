@@ -52,13 +52,9 @@ fatal_police_shootings<- read_csv("data/fatal-police-shootings-data.csv")
 total_fatal_shootings <- fatal_police_shootings %>% 
   nrow()
 #filters and counts to get number of Black women fatally shot
-total_black_women_shot <- fatal_police_shootings %>% 
-  filter(gender == "F" & race == "B") %>% 
-  summarise(
-      total_black_women_shot = sum(n()
-  ))
-
-
+total_black_women_shot <- fatal_police_shootings %>% filter(gender == "F" & race == "B") %>% nrow()
+#filters and counts to get number of fatal shootings where race is known
+race_known <- fatal_police_shootings %>% filter(!is.na(race)) %>% nrow() 
 
 ```
 
@@ -68,14 +64,14 @@ In this notebook, we are reverse engineering five sentences from the story.
 ### Sentence 1 - Jenna
 
 * **Sentence text**: [“Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths.”]
-* **Analysis summary**: I was able to confirm the finding for the first part of the sentence, which stated that black women accounted for less than 1 percent of overall fatal shootings. However, when I calculated the remaining two parts of the sentence, I couldn't confirm the finding. The sentence states that black women account for 20% of women shot, but I got 18%. The more troubling of the two not confirmed was the last part. My work found that 12.6% of all unarmed deaths were black women, but the sentence states they account for 28%. My only explanation at this point would be that they included the "undetermined" entries in the unnamed category as well.
+* **Analysis summary**: I was able to confirm the finding for the first part of the sentence, which stated that black women accounted for less than 1 percent of overall fatal shootings. However, when I calculated the remaining two parts of the sentence, I couldn't confirm the finding. The sentence states that black women account for 20% of women shot, but I got 18%. The more troubling of the two not confirmed was the last part. My work found that 12.6% of all unarmed deaths were black women, but the sentence states they account for 28%. A possible explanation would be that they included the "undetermined" entries in the unnamed category as well. Another possible explanation is because the story was published in Sept of 2020, and the data base was most recently updated in Sept. 2021. The trends in the data are relatively similar, but I believe that's why I cannot replicate their findings exactly.
 
 
 ```{r}
 # Put code to reverse engineer sentence here
 #(part 1)Black women have accounted for less than 1 percent of the overall fatal shootings
 
-total_black_women_shot_percentage = (total_black_women_shot/total_fatal_shootings)*100
+total_black_women_shot_percentage = (total_black_women_shot/race_known)*100
 total_black_women_shot_percentage
 
 # Display results of code below this codeblock
@@ -110,11 +106,42 @@ total_unarmed = fatal_police_shootings %>%
 ### Sentence 2 - Jenna
 
 * **Sentence text**: [“About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.”]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?] My entire analysis is a bit off from the data listed in the sentence. I believe that is because the story was published in Sept of 2020, and the data base was most recently updated in Sept. 2021. The trends in the data are relatively similar, but I believe that's why I cannot replicate their findings exactly. 
 
 ```{r}
 # Put code to reverse engineer sentence here
 
+#create new df of women shot
+women_df <- fatal_police_shootings %>% 
+  filter(gender=="F")
+#count rows
+  nrow(women_df)
+  #294 women
+#filter for signs_of_mental_illness
+women_mental_illness<-  women_df %>% 
+  filter(signs_of_mental_illness=="TRUE")
+#count rows 
+  nrow(women_mental_illness)
+  #95 women with mental illness
+#divide women by signs of mental illness and *100
+(95/294)*100
+  #32.3% 
+    
+#create new df of men shot
+men_df <- fatal_police_shootings %>% 
+  filter(gender=="M")
+#count rows
+  nrow(men_df)
+  # 6303 men
+#filter for signs_of_mental_illness
+men_mental_illness<-  men_df %>% 
+  filter(signs_of_mental_illness=="TRUE")
+#count rows 
+  nrow(men_mental_illness)
+  #1399 men with mental illness
+#divide men by signs of mental illness and *100
+  (1399/6303)*100
+  #22.2%
 # Display results of code below this codeblock
 
 ```
@@ -173,11 +200,22 @@ hispanic_unarmed_women<-fatal_police_shootings%>%
 ### Sentence 5 - Max
 
 * **Sentence text**: [Paste in sentence to engineer here]
-
+“Of the 89 women killed at residences where they lived or often stayed, 12 encounters began as did Taylor’s — with a warrant to conduct a search or make an arrest in an investigation.”
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+I was able to confirm some findings by assume that they used column names. 
 
 ```{r}
 # Put code to reverse engineer sentence here
+
+warrants_residences <-fatal_police_shootings %>%
+filter (gender == "F" & location == "Residence") %>%
+summarise(count=n())
+
+
+Warrants_residences %>%
+group_by(warrant) %>%
+ summarise(number=n())
+
 
 
 # Display results of code below this codeblock
