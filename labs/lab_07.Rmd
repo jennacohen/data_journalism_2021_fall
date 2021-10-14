@@ -90,7 +90,7 @@ Q6. What might explain why, according to this site, the DOJ has filed PPP-relate
 A6. Several states have multiple districts within their state (ie. there's a Northern, Middle and Southern District of Alabama). Just because less than half of the districts have cases filed against them doesn't mean that less than half the states themselves have cases filed against them. 
 
 Q7. Which state had the most approved PPP loans per 100,000 population? [This web page](https://smussenden.github.io/coursefiles/ppp_scraping_example/index.html) has links to 52 individual web pages, one for each state (plus Washington, D.C. and Puerto Rico). Each of those web pages contains a one-row html table that has the name of the state, the number of approved loans, and the 2019 population. Here's an example for [Alabama](https://smussenden.github.io/coursefiles/ppp_scraping_example/states/alabama.html). You'll need to loop over the individual state urls, scrape each individual page and combine the information on each page into a single dataframe to answer this question.  
-A7.
+A7. South Dakota had the most approved PPP loans with 7379.531 loans per 100,000.
 ```{r}
 
 state_urls <- "https://smussenden.github.io/coursefiles/ppp_scraping_example/index.html"
@@ -122,4 +122,12 @@ for(row_number in 1:nrow(state_url_list)){
       bind_rows(state_info)
   
 }
+
+all_state_info<- all_state_info %>% 
+   mutate(
+    pop_100000 = population/100000, 
+    per_100000 = (total_ppp_loans/pop_100000)
+  ) %>% 
+  arrange(desc(per_100000))
+
 ```
