@@ -149,8 +149,8 @@ men_mental_illness<-  men_df %>%
 ### Sentence 3 - Taneen
 
 * **Sentence text**: [“Crenshaw said Black women’s deaths also may be dismissed as “collateral damage” if they are killed while police are pursuing someone else. Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally.”]
-* **Analysis summary**: [I was sort of able to confirm the finding. The Washington Post didn't define what they meant as collateral in the data. So I guessed that the columns they used for this part were “armed” and “flee.” I was able to get 20 women from counting “unarmed” and “not fleeing/NA.” I am not confident that that is the same way WaPo got their number.
-For the second part where they said 12 out of 20 were accidents, I am not sure what variables they used to get that answer, so I was not able to confirm that piece.]
+* **Analysis summary**: [I was sort of able to confirm the finding. The Washington Post didn't define what they meant as collateral. I think the columns they used were “armed” and “flee.” I was able to get 20 women from counting “unarmed” and “not fleeing/NA.”
+I was not able to confirm the second part because I don't think it is in the data. I think the way the WaPo got that information is by seeing the 20 women killed in collateral damage in the data, and then request police reports/interviews to get that detailed information.]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -162,16 +162,15 @@ unarmed_women%>%
    summarise(number = n()) 
 
 #(part 2) 12/20 were shot in crossfire or accidentally shot
-  #honestly not sure how they got this from the data
+  #I do not think they got this from the data
 
 # Display results of code below this codeblock
 
-```
 
 ### Sentence 4 - Jamie
 
 * **Sentence text**: [Since 2015, police have killed 26 unarmed women, including Taylor. Of those, 14 were White, seven were Black, four were Hispanic and one’s race was unknown. While about twice as many White women were shot and killed as Black women, White women account for five times the Black female population"]
-* **Analysis summary**: [For the first part, my result was that police killed 28 unarmed women. The second part I found that there were 15 White women and 5 Hispanic women instead.]
+* **Analysis summary**: [For the first part, my result was that police killed 28 unarmed women, not 26. The second part I found that there were 15 White women and 5 Hispanic women instead, hence 2 more people in the outcome. The differences in the result might be because the story was published in September 2020, but the data that was used was updated in September 2021, which might have added new information.]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -195,6 +194,7 @@ hispanic_unarmed_women<-fatal_police_shootings%>%
 # Display results of code below this codeblock
 
 ```
+
 
 
 ### Sentence 5 - Max
