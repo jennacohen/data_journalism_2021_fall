@@ -117,7 +117,7 @@ for(row_number in 1:nrow(state_url_list)){
     html_table()
   #print each table (could comment this out eventually, but is a good way to check everythng is correct)
   print(state_info)
-  3#put every row from each state into the empty df we created 
+  #put every row from each state into the empty df we created 
   all_state_info <- all_state_info %>%
       bind_rows(state_info)
   
