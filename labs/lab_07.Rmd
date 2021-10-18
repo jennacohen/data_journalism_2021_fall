@@ -92,32 +92,32 @@ A6. Several states have multiple districts within their state (ie. there's a Nor
 Q7. Which state had the most approved PPP loans per 100,000 population? [This web page](https://smussenden.github.io/coursefiles/ppp_scraping_example/index.html) has links to 52 individual web pages, one for each state (plus Washington, D.C. and Puerto Rico). Each of those web pages contains a one-row html table that has the name of the state, the number of approved loans, and the 2019 population. Here's an example for [Alabama](https://smussenden.github.io/coursefiles/ppp_scraping_example/states/alabama.html). You'll need to loop over the individual state urls, scrape each individual page and combine the information on each page into a single dataframe to answer this question.  
 A7. South Dakota had the most approved PPP loans with 7379.531 loans per 100,000.
 ```{r}
-
+#grab page that has urls
 state_urls <- "https://smussenden.github.io/coursefiles/ppp_scraping_example/index.html"
-
+#read the html and pull out the table that holds the urls within the html
 state_url_list <- state_urls %>%
   read_html() %>% 
   html_table()
-
+#only keep the section of html table that has the urls
 state_url_list <- state_url_list [[1]]
-
+#empty df to eventually put info
 all_state_info <- tibble()
-
+#loop through each url from state_url_list
 for(row_number in 1:nrow(state_url_list)){
-  
+  #keep only the row for a given row number, get rid of every other row (so it doesn't keep repeating on the same row)
   each_row_df <- state_url_list %>%
       slice(row_number)
-  
+  #define url of page to get
   target_url <- each_row_df$url
 
 #print(target_url)
-
+  #create df that visits url from each state, reads inn table and extracts nested list
   state_info <- target_url %>%
     read_html() %>%
     html_table()
-  
+  #print each table (could comment this out eventually, but is a good way to check everythng is correct)
   print(state_info)
-  
+  3#put every row from each state into the empty df we created 
   all_state_info <- all_state_info %>%
       bind_rows(state_info)
   
