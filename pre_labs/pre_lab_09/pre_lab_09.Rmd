@@ -30,7 +30,8 @@ The dataset we'll use is the PPP loan data for Maryland.  Let's load it.
 
 ### Task 2: Load data
 **Task** Run the following code to load packages. In the space below, indicate how many rows and columns it has.
-**Answer**
+**Answer** 
+Rows: 195865 Columns: 63
 
 ```{r}
 ppp_maryland <- read_csv("data/ppp_loans_md.csv.zip")
