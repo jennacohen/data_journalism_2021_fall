@@ -148,24 +148,20 @@ men_mental_illness<-  men_df %>%
 
 ### Sentence 3 - Taneen
 
-* **Sentence text**: [“Crenshaw said Black women’s deaths also may be dismissed as “collateral damage” if they are killed while police are pursuing someone else. Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally.”]
-* **Analysis summary**: [I was sort of able to confirm the finding. The Washington Post didn't define what they meant as collateral. I think the columns they used were “armed” and “flee.” I was able to get 20 women from counting “unarmed” and “not fleeing/NA.”
-I was not able to confirm the second part because I don't think it is in the data. I think the way the WaPo got that information is by seeing the 20 women killed in collateral damage in the data, and then request police reports/interviews to get that detailed information.]
+* **Sentence text**: [“As with fatal police shootings of men, the vast majority of the women killed were armed with a potential weapon at the time, although slightly less often: 89 percent of the women were armed, compared to 91 percent of the men.”]
+^new sentence
+* **Analysis summary**: [_________]
 
 ```{r}
 # Put code to reverse engineer sentence here
-unarmed_women<-fatal_police_shootings %>% 
-  filter (gender=="F" & armed=="unarmed")
-#(part 1) 20/247 women were killed as collateral damage
-unarmed_women%>%
-  group_by(flee)%>%
-   summarise(number = n()) 
+#89 percent of women were armed
+fatal_police_shootings%>%
+  filter(gender=="F")%>%
+  group_by(armed)%>%
+  summarise(count = n())
+  #is there a way to put all of the weapons into one category so its armed vs unarmed instead of the individual weapons and unarmed in one column. long story short i want it to be like unarmed vs armed
 
-#(part 2) 12/20 were shot in crossfire or accidentally shot
-  #I do not think they got this from the data
-
-# Display results of code below this codeblock
-
+```
 
 ### Sentence 4 - Jamie
 

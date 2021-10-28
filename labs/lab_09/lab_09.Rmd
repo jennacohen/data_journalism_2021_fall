@@ -77,7 +77,14 @@ wv_loans_approved_april %>%
 **A2.** 
 ```{r}
 total_loans_by_state<- read_csv("data/state_ppp_all.csv")
-
+#rename N and S Dakota to properly join
+total_loans_by_state<- total_loans_by_state %>% 
+  mutate(state = case_when(
+    state == "N Dakota" ~ "North Dakota",
+    state == "S Dakota" ~ "South Dakota",
+    #this "replaces" existing data that's spelled correctly with itself
+    TRUE ~ state
+  ))
 library(tidycensus)
 
 acs_2019 <- load_variables(2019, "acs5")
@@ -101,7 +108,9 @@ states_pop_loans <- state_population %>%
 states_pop_loans %>%
   ggplot() +
   geom_bar(aes(x=reorder(state,per_100k), weight=per_100k,), fill="blue")+
-  labs(
+  theme(
+    axis.text.x = element_text(angle = 45,  hjust=1))+
+    labs(
     title="States with Highest PPP Loan Approval per 100,000 People",
     x = "State",
     y = "Loans Approved (per 100,000)",
@@ -137,6 +146,8 @@ below_25k<- wv_ppp_loans %>%
      forgiveness_amount_new = case_when(
         forgiveness_amount == 'NA' ~ 0
      )
+     
+    #is.na??
   )
 ```
 
