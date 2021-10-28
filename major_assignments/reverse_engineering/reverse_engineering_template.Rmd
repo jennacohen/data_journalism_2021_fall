@@ -150,16 +150,45 @@ men_mental_illness<-  men_df %>%
 
 * **Sentence text**: [“As with fatal police shootings of men, the vast majority of the women killed were armed with a potential weapon at the time, although slightly less often: 89 percent of the women were armed, compared to 91 percent of the men.”]
 ^new sentence
-* **Analysis summary**: [_________]
+* **Analysis summary**: [_________] Be sure to address that the counts are closer when undetermined is considered armed, this is prob how the post considered it. 
 
 ```{r}
 # Put code to reverse engineer sentence here
-#89 percent of women were armed
+#Each gender is ran twice- one including the undetermined number count as armed and one counting undetermined as unarmed. 
+
+
+#89 percent of women were armed (with undetermined considered armed)
 fatal_police_shootings%>%
-  filter(gender=="F")%>%
-  group_by(armed)%>%
-  summarise(count = n())
-  #is there a way to put all of the weapons into one category so its armed vs unarmed instead of the individual weapons and unarmed in one column. long story short i want it to be like unarmed vs armed
+  filter(gender=="F" & armed != "unarmed")%>%
+  summarise(
+    count = n(),
+    percent_women_armed= (count/total_women_shot)*100
+  ) 
+#89 percent of women were armed (with undetermined considered unarmed)
+fatal_police_shootings%>%
+  filter(gender=="F" & armed != "unarmed" & armed != "undetermined")%>%
+  summarise(
+    count = n(),
+    percent_women_armed_without_undet= (count/total_women_shot)*100
+  ) 
+
+  #filters and counts men fatally shot
+  total_men_shot <- fatal_police_shootings %>% filter(gender == "M") %>% nrow()
+
+#91 percent of men were armed (with undetermined considered armed)
+fatal_police_shootings%>%
+  filter(gender=="M" & armed != "unarmed")%>%
+  summarise(
+    count = n(),
+    percent_men_armed= (count/total_men_shot)*100
+  ) 
+#91 percent of men were armed (with undetermined considered unarmed)
+fatal_police_shootings%>%
+  filter(gender=="M" & armed != "unarmed" & armed != "undetermined")%>%
+  summarise(
+    count = n(),
+    percent_men_armed_without_undet= (count/total_men_shot)*100
+  ) 
 
 ```
 
@@ -195,25 +224,21 @@ hispanic_unarmed_women<-fatal_police_shootings%>%
 
 ### Sentence 5 - Max
 
-* **Sentence text**: [Paste in sentence to engineer here]
-“Of the 89 women killed at residences where they lived or often stayed, 12 encounters began as did Taylor’s — with a warrant to conduct a search or make an arrest in an investigation.”
+* **Sentence text**: [By race, 147 of the women killed were White, 48 Black and 29 Hispanic. Five were Native American, four were Asian and three were other races. In 11 cases, race could not be determined.]
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
-I was able to confirm some findings by assume that they used column names. 
+Derek's Note:
+Describe the new totals and how it does not match exactly, most likely because this dataset was updated in 2021 and our story was published inn 2020. 
+
 
 ```{r}
 # Put code to reverse engineer sentence here
-
-warrants_residences <-fatal_police_shootings %>%
-filter (gender == "F" & location == "Residence") %>%
-summarise(count=n())
-
-
-Warrants_residences %>%
-group_by(warrant) %>%
- summarise(number=n())
-
-
-
+fatal_police_shootings%>%
+  filter(gender=="F") %>% 
+  group_by(race) %>% 
+  summarise(
+    women_killed = n()
+  )
 # Display results of code below this codeblock
 
 ```

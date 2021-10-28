@@ -138,17 +138,19 @@ To answer those questions, make a codeblock and do the following:
 4. Make a scatterplot. I didn't show you how to do this, so look it up! 
 5. In the answer space below, describe what you see and answer the questions posed above.  In a general sense, what do you think this means?  
 
-**A3.**  
+**A3.**  I think several people had their full loan forgiven due to the thick line of dots that have a near perfect slope. Some people only had their loan partially forgiven, but those appear to be outliers on the scatter plot. There is also a thick line along the 0 from the y axis. We're considering NA 0's on this scatter plot, so we can't conclude that these are all 100% not forgiven. That being said, there are also a large number of people that had none of their loan forgiven. 
 ```{r}
 below_25k<- wv_ppp_loans %>% 
   filter(amount <= 25000) %>% 
-  mutate(
-     forgiveness_amount_new = case_when(
-        forgiveness_amount == 'NA' ~ 0
-     )
-     
-    #is.na??
-  )
+  mutate(forgiveness_amount = case_when(
+    is.na(forgiveness_amount) ~ 0,
+    TRUE ~ forgiveness_amount
+  ))
+
+below_25k %>% 
+  ggplot(aes(x=amount, y=forgiveness_amount))+
+  geom_point(size=1)
+
 ```
 
 -30-
