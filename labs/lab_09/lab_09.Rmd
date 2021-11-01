@@ -107,7 +107,7 @@ states_pop_loans <- state_population %>%
 
 states_pop_loans %>%
   ggplot() +
-  geom_bar(aes(x=reorder(state,per_100k), weight=per_100k,), fill="blue")+
+  geom_bar(aes(x=reorder(state,per_100k), weight=per_100k), fill="blue")+
   theme(
     axis.text.x = element_text(angle = 45,  hjust=1))+
     labs(
@@ -150,7 +150,7 @@ below_25k<- wv_ppp_loans %>%
 below_25k %>% 
   ggplot(aes(x=amount, y=forgiveness_amount))+
   geom_point(size=1)
-
+#Derek's note: it's best practice to put the aes() on the most granular level of the graph, so in this case that would be: ggplot() + geom_point(aes(x=amount,y=forgiveness_amount)) Your way works, but if you're doing a more complicated graph that has multiple elements you want to make sure that you've got the aesthetics on the proper geometric object.
 ```
 
 -30-
