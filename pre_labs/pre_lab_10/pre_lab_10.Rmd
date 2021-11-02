@@ -98,6 +98,7 @@ maryland_ppp <- read_rds("data/pre_lab_10.rds")
 
 **Task** First, we'll create a dataframe that has county (jurisdiction) level counts of approved applications. Run the following code to do that. There are some mistakes in the data, so we're going to remove those with a filter after doing the counting.
 **Answer** Describe what the code below is doing and the output.
+It's storing the name and count of all MD counties from the PPP data into a new dataframe. However in the data, there are a few anomolies that don't appear to be MD counties. 
 
 ```{r}
 md_counties <- maryland_ppp %>%
