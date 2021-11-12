@@ -1,0 +1,117 @@
+---
+title: "Reverse Engineering Project"
+author: Jenna Cohen, Taneen Momeni, Max Boyarsky and Jamie Pinzon
+date: 11/2021
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Core Dataset
+
+We will be using the (538 Comic Datasets) [https://github.com/fivethirtyeight/data/tree/master/comic-characters] for our analysis
+
+## Load libraries
+
+Loading required libraries for this analysis.
+
+```{r echo=FALSE, message=FALSE}
+#turn off scientific notation
+options(scipen=999)
+#load tidyverse
+library(tidyverse)
+#load lubridate - not sure if we'll need
+library(lubridate)
+#load refinr - not sure if we'll need
+library(refinr)
+#we'll add to these as we need other libs
+```
+
+## Load and Cleaning Data
+Should probably mutate to add a column in each that says DC or marvel - then join?
+
+```{r}
+
+dc<- read_csv("data/dc_comic_data.csv")
+marvel<- read_csv("data/marvel_comic_data.csv")
+
+dc<- dc %>% 
+  mutate(
+    #type = "comic",
+    publisher = "dc"
+  )
+
+marvel<- marvel %>% 
+  mutate(
+    #type = "comic",
+    publisher = "marvel"
+  )
+
+#tried this and it created a list of 112 million rows??? was expecting 22k 
+#master_list <- marvel %>% 
+  #left_join(dc, by=c('type'))
+
+#this isn't working either !!!
+#joined <- rbind(marvel, dc)
+```
+
+## Taneen
+
+Question 1: When was the first character that had a different identity (so a person who was not a straight cis white man) introduced into the universe for each of the companies, what were their identities, and were they good, bad, or neutral? 
+
+This question is newsworthy because these comic books led to the production of a lot of the highest grossing movies. They have such a big impact and wide audience that range from people who actually read the books to people who watch the movies based off of the books. I think it’s interesting to know when the books started considering other identities to represent within their content, and how they chose to represent them. I think more journalistic works have asked this question for gender, but only men/women and did not include other gender identities. I think there are also some works that have asked this for racial identities as well. 
+
+```{r}
+#analysis here
+```
+
+## Jenna
+
+Question 2: How often do gender or sexual minorities (i.e. homosexual characters) appear in the comics compared to majorities?
+
+This question is newsworthy because it speaks to the greater issue of representation of marginalized groups in media, in our case, comic books specifically. Comic books are consumed widely across all identities, but how do characters in these comics reflect their audience? I think reporting is being done at a large scale in the entertainment industry to show how there is a lack of representation for gender or sexual minorities, but other than the 538 story, I’ve seen nothing to address under representation in comics specifically. 
+
+```{r}
+#analysis here
+```
+
+Question 3: Do minorities (women, GSM labeled characters, etc.) more often hold a public or secret identity? 
+
+On the point of representation, it’s important to analyze how the representation is portrayed. Are minorities often made to hide? This question plays into the overall salience of minority representation in media we consume. I have not seen journalistic work address issues of public or secret identity in comics. 
+
+```{r}
+#analysis here
+```
+
+
+## Jaime
+
+Question 4: What does the number of appearances of the deceased characters look like? 
+
+The question is newsworthy because we can look into how many times a character is in a comic book until they are deceased and can also try and see what type of characters stay in the universe longer, and what type of characters die the most. 
+
+```{r}
+#analysis here
+```
+
+
+## Max
+
+Question 5: Are male or female characters more often to also be a GSM? If so, is there ever a noticeable trend shift in this representation throughout history, or does it always remain skewed?
+
+This question is a newsworthy question because it will be interesting to see how, over time, they show GSM characters broken down by gender. Do these trends reinforce/challenge existing stereotypes? This question plays into the theme of representation we’ve been looking at. I have not seen journalistic work address our question. 
+
+```{r}
+#analysis here
+```
+
+
