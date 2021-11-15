@@ -37,8 +37,7 @@ library(refinr)
 ```
 
 ## Load and Cleaning Data
-Should probably mutate to add a column in each that says DC or marvel - then join?
-
+Should probably mutate to add a column in each that says DC or marvel - then join? -Jenna
 ```{r}
 
 dc<- read_csv("data/dc_comic_data.csv")
@@ -56,22 +55,26 @@ marvel<- marvel %>%
     publisher = "marvel"
   )
 
-#tried this and it created a list of 112 million rows??? was expecting 22k 
+#tried this and it created a list of 112 million rows??? was expecting 22k -jenna 
 #master_list <- marvel %>% 
   #left_join(dc, by=c('type'))
 
-#this isn't working either !!!
+#this isn't working either !!! -jenna
 #joined <- rbind(marvel, dc)
+
 ```
+
 
 ## Taneen
 
-Question 1: When was the first character that had a different identity (so a person who was not a straight cis white man) introduced into the universe for each of the companies, what were their identities, and were they good, bad, or neutral? 
+Question 1: When were the first characters that had a different identities (so people who were not straight cis white men) introduced into the universe for each of the companies; what were their identities, and were they good, bad, or neutral? 
 
 This question is newsworthy because these comic books led to the production of a lot of the highest grossing movies. They have such a big impact and wide audience that range from people who actually read the books to people who watch the movies based off of the books. I think it’s interesting to know when the books started considering other identities to represent within their content, and how they chose to represent them. I think more journalistic works have asked this question for gender, but only men/women and did not include other gender identities. I think there are also some works that have asked this for racial identities as well. 
 
 ```{r}
 #analysis here
+#so my plan for this is to look at the data for each company separately. categories I’m going to look at are: align, sex, GSM, and first appearance. don’t have to exclude anything for gsm b/c that category shows if the character is a sexual minority, but for sex i will exclude male
+#i just realized that the data doesn’t have anything explicitly for race which is interesting
 ```
 
 ## Jenna
@@ -93,7 +96,7 @@ On the point of representation, it’s important to analyze how the representati
 ```
 
 
-## Jaime
+## Jamie
 
 Question 4: What does the number of appearances of the deceased characters look like? 
 
@@ -101,6 +104,9 @@ The question is newsworthy because we can look into how many times a character i
 
 ```{r}
 #analysis here
+#I will filter out the deceased characters and then arrange it with the times of appearance. And also look into the gender of these characters and what types of character (good, neutral or bad) and calculate the percentage. 
+#  
+
 ```
 
 
@@ -112,6 +118,8 @@ This question is a newsworthy question because it will be interesting to see how
 
 ```{r}
 #analysis here
+
 ```
+
 
 
