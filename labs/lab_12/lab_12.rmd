@@ -137,7 +137,7 @@ print_date = str_replace_all(print_date, "-", "")
 
 md_file_name<- paste0("maryland_zips_", print_date, ".csv")
 
-non_md_file_name<-paste0("non_md_zips_", print_date, ".csv")
+non_md_file_name<-paste0("non_maryland_zips_", print_date, ".csv")
 
 write_csv(top_25_md_zips, md_file_name)
 
