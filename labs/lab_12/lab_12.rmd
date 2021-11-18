@@ -26,6 +26,8 @@ library(janitor)
 library(lubridate)
 library(ggrepel)
 library(sf)
+library(tidycensus)
+library(tigris)
 ```
 
 ## Questions
@@ -98,7 +100,7 @@ To do that, you will need to:
 
 Google the top 2-3 zip codes from both Maryland and non-Maryland results and describe them in your answer.
 
-**A2.**
+**A2.** The top MD zip codes are 20906, 20878 and 20874, all located in Montgomery County- specifically Aspen Hills, Gaithersburg and Germantown. The top non-MD zip codes are 20011, 20009 and 20002 all located in Washington D.C,specifically Petworth, Adams Morgan and Capitol Hill neighborhoods. 
 
 ```{r}
 all_vaccines_by_zip <- read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") %>% 
@@ -119,14 +121,27 @@ md_zips<- cleaned_zips %>%
   filter(zip_code >= 20601 & zip_code<= 21930) %>% 
   arrange(desc(fully_vaccinated))
 
+top_25_md_zips<- md_zips %>% 
+  head(25)
+
 non_md_zips<- cleaned_zips %>% 
   filter(!zip_code>= 20601 | !zip_code<= 21930)%>% 
   arrange(desc(fully_vaccinated))
 
-file_name<- paste(format(today()))
-file_name
+top_25_non_md_zips<- non_md_zips %>% 
+  head(25)
 
-write_csv(md_zips, paste0("maryland_zips", file_name, ".csv"))
+print_date<- format(today())
+print_date = str_replace_all(print_date, "-", "")
+#print_date
+
+md_file_name<- paste0("maryland_zips_", print_date, ".csv")
+
+non_md_file_name<-paste0("non_md_zips_", print_date, ".csv")
+
+write_csv(top_25_md_zips, md_file_name)
+
+write_csv(top_25_non_md_zips, non_md_file_name)
 
 ```
 
@@ -136,7 +151,71 @@ You WILL need to ensure that the columns you use to join the two dataframes are 
 
 Describe the output of the map below, and say what you think the most interesting areas are.
 
-**A3.**
+**A3.** 
+The standout things from the map below are that many of the zip codes that have less than 50% vaccinated are around the edges of the state.
 
 ```{r}
+
+#get md county pop info
+md_population <- get_acs(geography = "zcta", 
+              variables = c(population = "B01001_001"), 
+              state = "MD",
+              geometry = TRUE)
+
+#md_population <-md_population %>% 
+ # rename("zip_code" = "GEOID") %>% 
+  #select(-NAME, - moe, -variable)
+
+#, by=c('zip_code' = 'zip_code')
+#fix type-- 
+
+md_zips<- md_zips %>% 
+  mutate (
+    zip_code = as.character(zip_code)
+  )
+
+md_pop_vax_joined<- md_population %>% 
+  left_join(md_zips, by=c('GEOID' = 'zip_code')) %>% 
+  select(-NAME, - moe, -variable,-first_dose, -second_dose, -single_dose, -atleast_one_dose) %>% 
+  rename("zip_pop" = "estimate") %>% 
+  mutate(
+    percent_vaxed = (fully_vaccinated/zip_pop)*100
+  ) %>% 
+  filter(percent_vaxed < 50) %>% 
+  arrange(desc(percent_vaxed))
+  
+
+#filter for loading zips
+md_zips_list = md_zips$zip_code
+
+#zip code maps
+zctas<- zctas()
+md_zctas <- zctas %>%
+  filter(GEOID10 %in% md_zips_list )
+#map
+md_zctas %>% 
+ggplot() + 
+  geom_sf() + 
+  geom_sf(data=md_pop_vax_joined, aes(fill=percent_vaxed)) + 
+  theme_minimal() +
+  labs(
+    title = paste("Zip Codes with less than 50% vaccination rate on", today()),
+    caption = "Source: State of Maryland"
+  ) +
+  scale_fill_viridis_b(option="magma",trans = "log") 
+
+```
+
+
+```{r}
+#for join problems
+
+#md_zips<- md_zips %>% 
+  #arrange(desc(zip_code))
+
+#md_population<- md_population %>% 
+ # arrange(desc(zip_code))
+
+#glimpse(md_zips)
+#glimpse(md_population)
 ```
