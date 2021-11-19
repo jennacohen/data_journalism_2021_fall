@@ -29,31 +29,55 @@ Loading required libraries for this analysis.
 options(scipen=999)
 #load tidyverse
 library(tidyverse)
+#load janitor - clean set names
+library(janitor)
 #load lubridate - not sure if we'll need
 library(lubridate)
 #load refinr - not sure if we'll need
 library(refinr)
 #we'll add to these as we need other libs
 ```
+## 250 word summary of findings thus far (for deliverable_03)
+
+-Question 2 - !!! newsworthy!! 99.5% of all characters in marvel universe are straight -  90 characters; 99% of all characters in DC universe are straight -  64 characters
+
+- Question 3 - not so newsworthy- number of female/gsm characters that have secret ids. in all but dc women, there are more secret id's than public id's among minorities, however there's a large NA category in all dataframes. the README file provided in the 538 data set does not say what the NA's in the id columns might represent
+
 
 ## Load and Cleaning Data
 Should probably mutate to add a column in each that says DC or marvel - then join? -Jenna
+
+pageid and urlslug are most likely not valuable columns in our analysis -Jenna
+
+Get rid of Na's in gsm column so it's easier to filter - Jenna
 ```{r}
 
 dc<- read_csv("data/dc_comic_data.csv")
 marvel<- read_csv("data/marvel_comic_data.csv")
 
 dc<- dc %>% 
-  mutate(
+  #mutate(
     #type = "comic",
-    publisher = "dc"
-  )
+    #publisher = "dc"
+  #)
+  select(-page_id, -urlslug) %>% 
+  clean_names() %>% 
+  mutate(gsm = case_when(
+    is.na(gsm) ~ "none",
+    TRUE ~ gsm
+  ))
 
 marvel<- marvel %>% 
-  mutate(
+  #mutate(
     #type = "comic",
-    publisher = "marvel"
-  )
+    #publisher = "marvel"
+  #)
+  select(-page_id, -urlslug) %>% 
+  clean_names()%>% 
+  mutate(gsm = case_when(
+    is.na(gsm) ~ "none",
+    TRUE ~ gsm
+  ))
 
 #tried this and it created a list of 112 million rows??? was expecting 22k -jenna 
 #master_list <- marvel %>% 
@@ -61,6 +85,7 @@ marvel<- marvel %>%
 
 #this isn't working either !!! -jenna
 #joined <- rbind(marvel, dc)
+
 
 ```
 
@@ -82,20 +107,150 @@ This question is newsworthy because these comic books led to the production of a
 Question 2: How often do gender or sexual minorities (i.e. homosexual characters) appear in the comics compared to majorities?
 
 This question is newsworthy because it speaks to the greater issue of representation of marginalized groups in media, in our case, comic books specifically. Comic books are consumed widely across all identities, but how do characters in these comics reflect their audience? I think reporting is being done at a large scale in the entertainment industry to show how there is a lack of representation for gender or sexual minorities, but other than the 538 story, I’ve seen nothing to address under representation in comics specifically. 
-
+#### Marvel
 ```{r}
-#analysis here
+#end result: count of total GSM & count of majority characters
+#for each data set, filter for GSM, count & reverse filter for GSM, count
+#also calculate percentage,  dig deeper to see different GSM breakdowns if we were to deem it newsworthy
+
+#gsm characters
+marvel_gsm<- marvel %>% 
+  filter(gsm != "none")
+
+marvel_gsm_breakdown<- marvel_gsm %>% 
+  group_by(gsm) %>% 
+  summarise(
+    gsm_count = n()
+  )
+#non_gsm characters
+marvel_non_gsm<- marvel %>% 
+  filter(gsm == "none")
+
+marvel_non_gsm_breakdown<- marvel_non_gsm %>% 
+  group_by(gsm) %>% 
+  summarise(
+    gsm_count = n()
+  )
+#total marvel characters for percentage purposes
+marvel_characters<- marvel %>% nrow()
+
+marvel_breakdown<- bind_rows(marvel_gsm_breakdown, marvel_non_gsm_breakdown) %>% 
+  mutate(
+    percent_in_universe = (gsm_count/marvel_characters)*100
+  )
+#marvel_gsm_count<- marvel_gsm %>% nrow()
+#marvel_non_gsm_count<- marvel_non_gsm %>% nrow()
+```
+#### DC
+```{r}
+#gsm characters
+dc_gsm<- dc %>% 
+  filter(gsm != "none")
+
+dc_gsm_breakdown<- dc_gsm %>% 
+  group_by(gsm) %>% 
+  summarise(
+    gsm_count = n()
+  )
+#non_gsm characters
+dc_non_gsm<- dc %>% 
+  filter(gsm == "none")
+
+dc_non_gsm_breakdown<- dc_non_gsm %>% 
+  group_by(gsm) %>% 
+  summarise(
+    gsm_count = n()
+  )
+#total marvel characters for percentage purposes
+dc_characters<- dc %>% nrow()
+
+dc_breakdown<- bind_rows(dc_gsm_breakdown, dc_non_gsm_breakdown) %>% 
+  mutate(
+    percent_in_universe = (gsm_count/dc_characters)*100
+  )
+#marvel_gsm_count<- marvel_gsm %>% nrow()
+#marvel_non_gsm_count<- marvel_non_gsm %>% nrow()
 ```
 
-Question 3: Do minorities (women, GSM labeled characters, etc.) more often hold a public or secret identity? 
+Question 3: Do minorities (women, GSM labeled characters, etc.) more often hold a public or secret identity?
 
 On the point of representation, it’s important to analyze how the representation is portrayed. Are minorities often made to hide? This question plays into the overall salience of minority representation in media we consume. I have not seen journalistic work address issues of public or secret identity in comics. 
 
+#### Marvel
 ```{r}
-#analysis here
+#need to filter for women & secret id, women & non secret id, gsm & secret id and non gsm secret id
+
+#for percentages
+marvel_women<- marvel %>% 
+  filter(sex == "Female Characters") %>% 
+  nrow()
+
+gsm_marvel<- marvel %>% 
+  filter(gsm != "none") %>% 
+  nrow()
+
+marvel_women_ids<- marvel %>% 
+  filter(sex == "Female Characters") %>% 
+  group_by(id) %>% 
+  summarise(
+    total_women = n()
+  ) %>% 
+  mutate(
+   percent_in_universe = (total_women/marvel_women)*100 
+  )
+
+#significant number of marvel women where id is na
+
+marvel_gsm_ids<- marvel %>% 
+  filter(gsm != "none") %>% 
+  group_by(id) %>% 
+  summarise(
+    total_gsm = n()
+  ) %>% 
+  mutate(
+   percent_in_universe = (total_gsm/gsm_marvel)*100 
+  )
+
+#in both cases, there are more characters with secret ids than public, but there are other factors that make this question less newsworthy
 ```
 
+#### DC
+```{r}
+#need to filter for women & secret id, women & non secret id, gsm & secret id and non gsm secret id
 
+#for percentages
+dc_women<- dc %>% 
+  filter(sex == "Female Characters") %>% 
+  nrow()
+
+gsm_dc<- dc %>% 
+  filter(gsm != "none") %>% 
+  nrow()
+
+dc_women_ids<- dc %>% 
+  filter(sex == "Female Characters") %>% 
+  group_by(id) %>% 
+  summarise(
+    total_women = n()
+  ) %>% 
+  mutate(
+   percent_in_universe = (total_women/dc_women)*100 
+  )
+
+#more public than secret (though sig. amount of na)
+
+dc_gsm_ids<- dc %>% 
+  filter(gsm != "none") %>% 
+  group_by(id) %>% 
+  summarise(
+    total_gsm = n()
+  ) %>% 
+  mutate(
+   percent_in_universe = (total_gsm/gsm_dc)*100 
+  )
+
+#over 50% secret ids for dc gsm characters, however also a large number of na 
+```
 ## Jamie
 
 Question 4: What does the number of appearances of the deceased characters look like? 
