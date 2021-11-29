@@ -16,6 +16,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Memo:
+- doesn't want step by step
+- wants sales pitch: here's the story we think we've found here, this is how we'd structure the story, include thought process (we didn't think this thing would be the most interesting thing starting out, we thought this would be...)
+- don't try to pretend there's a story somewhere if there isn't
+- more detail the better
+- tell the best stuff first: most interesting findings, we thought this would be the case and it wasn't, etc., reverse pyramid of results 
+- especially detail on how you approached making questions, why we think they'd be newsworthy, what it is about the data that solidified that or where the data wasn't able to answer it or what's missing that you would need to back it up
+- what else would need to be done to report out fully: interviews, more data, kinds of people you would like/need to talk to 
+
+
 ## Core Dataset
 
 We will be using the (538 Comic Datasets) [https://github.com/fivethirtyeight/data/tree/master/comic-characters] for our analysis
