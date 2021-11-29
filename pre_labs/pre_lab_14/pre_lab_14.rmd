@@ -255,7 +255,7 @@ Now we can begin to see some differences between the parties. We also could do t
 
 ### Task 14: Create a dataframe with the top 10 two-word phrases in 2020 and 2021 for Republican House candidates
 **Task** Run the following code and describe the results.
-**Answer**
+**Answer** These are bit more interesting- along with phrases related to covid, illegal immigrants, joe biden and biden administration all pop up. There are also a couple phrases that all refer to the vaccine in some way.
 
 ```{r}
 covid_tweets %>%
@@ -291,7 +291,7 @@ Another popular use of text analysis is to measure the sentiment of a word - whe
 
 ### Task 15: Load the bing lexicon and produce sentiments for our 2020 and 2021 unique words
 **Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive?
-**Answer**
+**Answer** I think a lot of it depends on the context in which the word is used. For example, the 2020 list lists critical as negative. However, depending on the context, it could be a positive. ie. The front line workers are critical in treating pandemic patients.
 
 ```{r}
 bing <- get_sentiments("bing")
