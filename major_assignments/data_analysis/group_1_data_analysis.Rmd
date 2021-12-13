@@ -40,7 +40,7 @@ We will be using the [538 Comic Datasets] (https://github.com/fivethirtyeight/da
 
 In this section, we’re loading the required libraries for this analysis.
 
-```{r echo=FALSE, message=FALSE}
+```{r}
 #turn off scientific notation
 options(scipen=999)
 #load tidyverse
@@ -438,39 +438,42 @@ It was interesting to see whether there was a more male or female representation
 
 In the Marvel Universe, 42 male characters are homosexual compared to 24 female characters. In the DC Universe, 30 male characters are homosexual compared to 24 female characters, and this trend is reversed when comparing bi-sexual characters. In the Marvel Universe, 13 female characters are bi-sexual compared to 5 male characters. In the DC Universe, 5 female characters are bi-sexual compared to 4 male characters. And, there are only 2 transgender characters combined from both Marvel and DC. The data can be better described in this graphic. 
 
+[Homosexual Characters](https://datawrapper.dwcdn.net/r782G/1/)
+[Bisexual Characters](https://datawrapper.dwcdn.net/8S9tx/1/)
+
 Despite having fewer GSM characters in total, DC has a higher percentage of them compared to Marvel. GSM characters make up 0.6% of total characters in the Marvel Universe compared to 0.9% of DC characters. 
 
 We felt this question would be a newsworthy question because it will be interesting to see how, over time, they show GSM characters broken down by gender. Do these trends reinforce/challenge existing stereotypes? This question plays into the theme of representation we’ve been looking at. I have not seen journalistic work address our question. 
 
 ###### DC
-```{r setup, include=FALSE}
+```{r }
 dc_gsm<-dc %>%
 group_by(gsm) %>%
 summarise(count=n())
 ```
 
-```{r setup, include=FALSE}
+```{r}
 dc_homosexual<-dc %>%
 filter(gsm =="Homosexual Characters") %>%
 group_by(sex) %>%
 summarise(count=n())
 ```
 
-```{r setup, include=FALSE}
+```{r}
 dc_bisexual<-dc%>%
 filter(gsm == "Bisexual Characters") %>%
 group_by(sex) %>%
 summarise(count=n())
 ```
 ###### Marvel
-```{r setup, include=FALSE}
+```{r}
 marvel_gsm<-marvel%>%
 group_by(gsm) %>%
 summarise(count=n())
 
 ```
 
-```{r setup, include=FALSE}
+```{r }
 marvel_homosexual<-marvel %>%
 filter(gsm =="Homosexual Characters") %>%
 group_by(sex) %>%
@@ -478,7 +481,7 @@ summarise(count=n())
 
 ```
 
-```{r setup, include=FALSE}
+```{r }
 marvel_bisexual<-marvel %>%
 filter(gsm =="Bisexual Characters") %>%
 group_by(sex) %>%
@@ -486,7 +489,7 @@ summarise(count=n())
 
 ```
 
-```{r setup, include=FALSE}
+```{r }
 marvel_trans<-marvel %>%
 filter(gsm =="Transgender Characters") %>%
 group_by(sex) %>%
